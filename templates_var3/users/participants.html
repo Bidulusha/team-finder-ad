@@ -17,36 +17,6 @@
         </div>
     </div>
 
-<<<<<<<< HEAD:team_finder/templates_var1/users/participants.html
-    {% if request.user.is_authenticated %}
-        <div class="participants-filter">
-            <span class="filter-label">Фильтры пользователей:</span>
-            <div class="filter-chips">
-                <a href="?filter=owners-of-favorite-projects"
-                   class="filter-chip {% if active_filter == 'owners-of-favorite-projects' %}active{% endif %}">
-                    Авторы избранных проектов
-                </a>
-                <a href="?filter=owners-of-participating-projects"
-                   class="filter-chip {% if active_filter == 'owners-of-participating-projects' %}active{% endif %}">
-                    Авторы проектов, в которых я участвую
-                </a>
-                <a href="?filter=interested-in-my-projects"
-                   class="filter-chip {% if active_filter == 'interested-in-my-projects' %}active{% endif %}">
-                    Пользователи, которым нравятся мои проекты
-                </a>
-                <a href="?filter=participants-of-my-projects"
-                   class="filter-chip {% if active_filter == 'participants-of-my-projects' %}active{% endif %}">
-                    Участники моих проектов
-                </a>
-                {% if active_filter %}
-                <a href="/users/list" class="filter-reset">Сбросить</a>
-                {% endif %}
-            </div>
-        </div>
-    {% endif %}
-
-========
->>>>>>>> version-3-start-for-students:team_finder/templates_var3/users/participants.html
     {% if participants %}
     <div class="participants-grid">
         {% for participant in participants %}
@@ -72,6 +42,24 @@
     </div>
     {% else %}
     {% include 'includes/empty-project-card.html' with empty_title="Пока нет участников" empty_message="Попробуйте сбросить фильтр" button_link="/users/list" button_text="Сбросить" %}
+    {% endif %}
+
+    {% if page_obj.has_other_pages %}
+    <nav class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}" class="page-link">&laquo;</a>
+        {% endif %}
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <span class="page-link active">{{ num }}</span>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="page-link">&raquo;</a>
+        {% endif %}
+    </nav>
     {% endif %}
 </div>
 {% endblock %}

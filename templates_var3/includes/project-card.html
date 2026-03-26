@@ -46,5 +46,13 @@
             {% endif %}
         </div>
         {% endwith %}
+        {% if request.user.is_authenticated %}
+        <button class="project-fav-icon {% if request.user in project.favorites.all %}favorite{% else %}not-favorite{% endif %}"
+                data-project-id="{{ project.id }}"
+                data-fav="{% if request.user in project.favorites.all %}true{% else %}false{% endif %}"
+                title="В избранное">
+            {% include 'includes/svg/heart.html' %}
+        </button>
+        {% endif %}
     </div>
 </div>

@@ -9,6 +9,7 @@ __pycache__/
 *.so
 
 # Distribution / packaging
+pyproject.toml
 .Python
 build/
 develop-eggs/
@@ -115,6 +116,7 @@ celerybeat.pid
 .env
 .envrc
 .venv
+.ruff_cache
 env/
 venv/
 ENV/

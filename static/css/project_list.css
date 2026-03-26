@@ -234,3 +234,29 @@
     text-decoration: underline;
     color: #666;
 }
+
+/* ── Fav button ─────────────────────────────────────── */
+.project-fav-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  opacity: 0.4;
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.project-fav-icon:hover {
+  opacity: 0.8;
+  transform: scale(1.15);
+}
+
+.project-fav-icon.favorite {
+  opacity: 1;
+}
+
+.project-fav-icon.favorite svg {
+  fill: #e7000b;
+  stroke: #e7000b;
+}

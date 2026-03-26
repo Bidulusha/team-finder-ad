@@ -108,3 +108,39 @@ span svg {
 .black-button-share svg {
     margin: 0;
 }
+/* ── Pagination ─────────────────────────────────────── */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin: 32px 0 16px;
+  flex-wrap: wrap;
+}
+
+.page-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #111;
+  text-decoration: none;
+  background: #fff;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.page-link:hover {
+  background: #f5f5f5;
+  border-color: #bbb;
+}
+
+.page-link.active {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+  pointer-events: none;
+}
