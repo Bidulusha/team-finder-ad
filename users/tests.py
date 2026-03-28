@@ -1,4 +1,5 @@
 from django.test import TestCase, Client
+from .forms import RegistrationForm
 
 from .models import User
 
@@ -42,8 +43,6 @@ class UserModelTest(TestCase):
 
 class RegistrationFormTest(TestCase):
     def test_valid_registration(self):
-        from .forms import RegistrationForm
-
         form = RegistrationForm(
             data={
                 "name": "Иван",

@@ -1,0 +1,34 @@
+[
+    {
+        "email": "maria@yandex.ru",
+        "name": "Мария",
+        "surname": "Иванова",
+        "password": "password",
+        "about": "Фронтенд-разработчик, люблю React и TypeScript.",
+        "github_url": "https://github.com/maria"
+    },
+    {
+        "email": "alex@example.com",
+        "name": "Алексей",
+        "surname": "Петров",
+        "password": "password",
+        "about": "Python-бэкендер, фанат Django и FastAPI.",
+        "github_url": "https://github.com/alex"
+    },
+    {
+        "email": "kate@example.com",
+        "name": "Катерина",
+        "surname": "Смирнова",
+        "password": "password",
+        "about": "UX/UI дизайнер, работаю в Figma.",
+        "github_url": ""
+    },
+    {
+        "email": "dmitry@example.com",
+        "name": "Дмитрий",
+        "surname": "Козлов",
+        "password": "password",
+        "about": "DevOps, Kubernetes, CI/CD enthusiast.",
+        "github_url": "https://github.com/dmitry"
+    }
+]

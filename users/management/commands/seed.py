@@ -10,7 +10,9 @@ from django.db import transaction
 
 from projects.models import Project, Skill
 from users.models import User
+from team_finder.constants import SUPERUSER_EMAIL, SUPERUSER_NAME, SUPERUSER_SURNAME, SUPERUSER_PASSWORD
 
+import json
 
 class Command(BaseCommand):
     help = "Seed database with test users, projects and skills"
@@ -27,59 +29,33 @@ class Command(BaseCommand):
 
     # ── Superuser ──────────────────────────────────────────────────────────────
 
-    def _create_superuser(self):
-        if not User.objects.filter(
-            email="admin@teamfinder.ru"
-        ).exists():
+    def _create_superuser(self):        
+        if not User.objects.filter(email=SUPERUSER_EMAIL).exists():
             User.objects.create_superuser(
-                email="admin@teamfinder.ru",
-                name="Admin",
-                surname="Adminov",
-                password="adminpass123",
+                email=SUPERUSER_EMAIL,
+                name=SUPERUSER_NAME,
+                surname=SUPERUSER_SURNAME,
+                password=SUPERUSER_PASSWORD,
             )
             self.stdout.write(
-                "  Created superuser: admin@teamfinder.ru / adminpass123"
+                self.style.SUCCESS(
+                    f"  Created superuser: {SUPERUSER_EMAIL} / {SUPERUSER_PASSWORD}"
+                )
             )
         else:
-            self.stdout.write("  Superuser already exists, skipping.")
+            self.stdout.write(
+                self.style.WARNING(
+                    f"  Superuser {SUPERUSER_EMAIL} already exists, skipping."
+                )
+            )
 
     # ── Users ──────────────────────────────────────────────────────────────────
 
     def _create_users(self):
-        specs = [
-            dict(
-                email="maria@yandex.ru",
-                name="Мария",
-                surname="Иванова",
-                password="password",
-                about="Фронтенд-разработчик, люблю React и TypeScript.",
-                github_url="https://github.com/maria",
-            ),
-            dict(
-                email="alex@example.com",
-                name="Алексей",
-                surname="Петров",
-                password="password",
-                about="Python-бэкендер, фанат Django и FastAPI.",
-                github_url="https://github.com/alex",
-            ),
-            dict(
-                email="kate@example.com",
-                name="Катерина",
-                surname="Смирнова",
-                password="password",
-                about="UX/UI дизайнер, работаю в Figma.",
-                github_url="",
-            ),
-            dict(
-                email="dmitry@example.com",
-                name="Дмитрий",
-                surname="Козлов",
-                password="password",
-                about="DevOps, Kubernetes, CI/CD enthusiast.",
-                github_url="https://github.com/dmitry",
-            ),
-        ]
+        specs = []
+        with open('specs.json', 'r', encoding='utf-8') as json_file:
+            specs = json.load(json_file)
+
         created = []
         for spec in specs:
             if not User.objects.filter(email=spec["email"]).exists():
@@ -128,75 +104,9 @@ class Command(BaseCommand):
     def _create_projects(self, users, skills):
         maria, alex, kate, dmitry = users
 
-        projects_data = [
-            dict(
-                name="TeamFinder Clone",
-                description="Клон платформы TeamFinder для практики Django. Ищу фронтенд-разработчика и дизайнера.",
-                owner=maria,
-                status="open",
-                github_url="https://github.com/maria/teamfinder-clone",
-                skill_names=[
-                    "Python",
-                    "Django",
-                    "React",
-                    "PostgreSQL",
-                ],
-                participant_users=[maria, alex],
-            ),
-            dict(
-                name="Personal Finance Tracker",
-                description="Приложение для учёта личных финансов. Стек: FastAPI + Vue.js + PostgreSQL.",
-                owner=alex,
-                status="open",
-                github_url="https://github.com/alex/finance-tracker",
-                skill_names=[
-                    "Python",
-                    "FastAPI",
-                    "Vue.js",
-                    "PostgreSQL",
-                    "Docker",
-                ],
-                participant_users=[alex, kate],
-            ),
-            dict(
-                name="Open Source Design System",
-                description="Дизайн-система с открытым исходным кодом. Компоненты React, документация в Storybook.",
-                owner=kate,
-                status="open",
-                github_url="",
-                skill_names=[
-                    "Figma",
-                    "React",
-                    "TypeScript",
-                    "JavaScript",
-                ],
-                participant_users=[kate, maria],
-            ),
-            dict(
-                name="K8s Monitoring Dashboard",
-                description="Дашборд для мониторинга кластеров Kubernetes. Бэкенд на Go, фронт на React.",
-                owner=dmitry,
-                status="open",
-                github_url="https://github.com/dmitry/k8s-dashboard",
-                skill_names=[
-                    "Go",
-                    "Kubernetes",
-                    "React",
-                    "Docker",
-                    "CI/CD",
-                ],
-                participant_users=[dmitry, alex],
-            ),
-            dict(
-                name="URL Shortener",
-                description="Сервис сокращения ссылок с аналитикой переходов. Завершённый учебный проект.",
-                owner=alex,
-                status="closed",
-                github_url="https://github.com/alex/url-shortener",
-                skill_names=["Python", "FastAPI", "Redis"],
-                participant_users=[alex],
-            ),
-        ]
+        projects_data = [] 
+        with open('projects_data.json', 'r', encoding='utf-8') as json_file:
+            projects_data = json.load(json_file)
 
         for data in projects_data:
             skill_names = data.pop("skill_names")

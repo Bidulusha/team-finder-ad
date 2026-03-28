@@ -1,10 +1,12 @@
 from django.conf import settings
 from django.db import models
+from django.shortcuts import redirect
+from team_finder.constants import STATUS_CHOICES, SKILL_NAME_MAX_LENGTH, PROJECT_NAME_MAX_LENGTH
 
 
 # ========== SKILL MODEL ==========
 class Skill(models.Model):
-    name = models.CharField(max_length=124, unique=True)
+    name = models.CharField(max_length=SKILL_NAME_MAX_LENGTH, unique=True)
 
     class Meta:
         verbose_name = "Навык"
@@ -17,9 +19,7 @@ class Skill(models.Model):
 
 # ========== PROJECT MODEL ==========
 class Project(models.Model):
-    STATUS_CHOICES = [("open", "Open"), ("closed", "Closed")]
-
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=PROJECT_NAME_MAX_LENGTH)
     description = models.TextField(blank=True)
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -29,7 +29,7 @@ class Project(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     github_url = models.URLField(blank=True)
     status = models.CharField(
-        max_length=6, choices=STATUS_CHOICES, default="open"
+        max_length=max([max([len(status) for status in status_option]) for status_option in STATUS_CHOICES]), choices=STATUS_CHOICES, default="open"
     )
     participants = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
@@ -54,3 +54,6 @@ class Project(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def get_absolute_url(self):
+        return redirect('projects:detail', project_id=self.pk)

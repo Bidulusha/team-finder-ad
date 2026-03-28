@@ -1,0 +1,82 @@
+[
+    {
+        "name": "TeamFinder Clone",
+        "description": "Клон платформы TeamFinder для практики Django. Ищу фронтенд-разработчика и дизайнера.",
+        "status": "open",
+        "github_url": "https://github.com/maria/teamfinder-clone",
+        "skill_names": [
+            "Python",
+            "Django",
+            "React",
+            "PostgreSQL"
+        ],
+        "participant_emails": [
+            "maria@yandex.ru",
+            "alex@example.com"
+        ]
+    },
+    {
+        "name": "Personal Finance Tracker",
+        "description": "Приложение для учёта личных финансов. Стек: FastAPI + Vue.js + PostgreSQL.",
+        "status": "open",
+        "github_url": "https://github.com/alex/finance-tracker",
+        "skill_names": [
+            "Python",
+            "FastAPI",
+            "Vue.js",
+            "PostgreSQL",
+            "Docker"
+        ],
+        "participant_emails": [
+            "alex@example.com",
+            "kate@example.com"
+        ]
+    },
+    {
+        "name": "Open Source Design System",
+        "description": "Дизайн-система с открытым исходным кодом. Компоненты React, документация в Storybook.",
+        "status": "open",
+        "github_url": "",
+        "skill_names": [
+            "Figma",
+            "React",
+            "TypeScript",
+            "JavaScript"
+        ],
+        "participant_emails": [
+            "kate@example.com",
+            "maria@yandex.ru"
+        ]
+    },
+    {
+        "name": "K8s Monitoring Dashboard",
+        "description": "Дашборд для мониторинга кластеров Kubernetes. Бэкенд на Go, фронт на React.",
+        "status": "open",
+        "github_url": "https://github.com/dmitry/k8s-dashboard",
+        "skill_names": [
+            "Go",
+            "Kubernetes",
+            "React",
+            "Docker",
+            "CI/CD"
+        ],
+        "participant_emails": [
+            "dmitry@example.com",
+            "alex@example.com"
+        ]
+    },
+    {
+        "name": "URL Shortener",
+        "description": "Сервис сокращения ссылок с аналитикой переходов. Завершённый учебный проект.",
+        "status": "closed",
+        "github_url": "https://github.com/alex/url-shortener",
+        "skill_names": [
+            "Python",
+            "FastAPI",
+            "Redis"
+        ],
+        "participant_emails": [
+            "alex@example.com"
+        ]
+    }
+]

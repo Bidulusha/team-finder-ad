@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # TODO: Создать и заполнить .env, ориентируясь на .env_example
 
-SECRET_KEY = config("DJANGO_SECRET_KEY")
+SECRET_KEY = config('DJANGO_SECRET_KEY')
 
 DEBUG = config("DJANGO_DEBUG", default=False, cast=bool)
 
@@ -29,7 +29,7 @@ INSTALLED_APPS = [
 
 AUTH_USER_MODEL = "users.User"
 
-LOGIN_URL = "/users/login/"
+LOGIN_URL = "users:login"
 
 AUTHENTICATION_BACKENDS = [
     "users.backends.EmailBackend",
@@ -51,8 +51,7 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
-            BASE_DIR
-            / f"templates_var{config('TASK_VERSION', default='1')}"
+            BASE_DIR/"templates_var3",
         ],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -110,7 +109,7 @@ if not DEBUG:
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Europe/Moscow"
 
 USE_I18N = True
 

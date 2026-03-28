@@ -1,0 +1,70 @@
+# PAGINATION
+PAGINATION_SIZE = 12  # количество проектов на странице
+
+# STATUS
+STATUS_CHOICES = [("open", "Открыт"), ("closed", "Закрыт")] # Статусы 
+CLOSE_STATUS = 'closed'
+STATUS_OPEN = 'open'
+
+# SKILLS
+MAX_SKIN_IN_PAGE = 10
+
+# VALIDATOR
+ALLOWED_REPOSITORY_PREFIX = ( # Разрешённые начала гитхаб (при необходимости и других гит хранилищ) ссылки
+    "http://github.com/",
+    "https://github.com/",
+    "http://www.github.com/",
+    "https://www.github.com/",
+)
+
+# MODELS
+SKILL_NAME_MAX_LENGTH = 124
+PROJECT_NAME_MAX_LENGTH = 200
+
+REGISTRATION_FORM_NAME_MAX_LENGTH = 124
+REGISTRATION_FORM_SURNAME_MAX_LENGTH = 124
+
+USER_NAME_MAX_LENGTH = 124
+USER_SURNAME_MAX_LENGTH = 124
+
+ABOUT_TEXTFIELD_MAX_LENGTH = 256
+
+# AVATARS
+AVATAR_IMAGE_SIZE = 200
+AVATAR_FONT_SIZE = 100
+AVATAR_IMAGE_FORMAT = "png"
+AVATAR_TEXT_COLOR = "white"
+
+TEXT_START_X = 0
+TEXT_START_Y = 0
+
+# ADMIN
+SUPERUSER_EMAIL = "admin@teamfinder.ru"
+SUPERUSER_NAME = "Admin"
+SUPERUSER_SURNAME = "Adminov"
+SUPERUSER_PASSWORD = "adminpass123"
+
+# AVATARS COLORS
+COLOR_BLUE = "#4A90D9"
+COLOR_PURPLE = "#7B68EE"
+COLOR_GREEN = "#48C78E"
+COLOR_ORANGE = "#F4A261"
+COLOR_TEAL = "#2A9D8F"
+COLOR_GOLD = "#E9C46A"
+COLOR_VIOLET = "#8338EC"
+COLOR_LIGHT_BLUE = "#3A86FF"
+COLOR_CORAL = "#E76F51"
+COLOR_MINT = "#06D6A0"
+
+AVATAR_COLORS = [
+    COLOR_BLUE,
+    COLOR_PURPLE,
+    COLOR_GREEN,
+    COLOR_ORANGE,
+    COLOR_TEAL,
+    COLOR_GOLD,
+    COLOR_VIOLET,
+    COLOR_LIGHT_BLUE,
+    COLOR_CORAL,
+    COLOR_MINT,
+]

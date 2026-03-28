@@ -1,20 +1,20 @@
-import re
-
 from django import forms
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 
 from .models import User
-
+from team_finder.constants import REGISTRATION_FORM_NAME_MAX_LENGTH, REGISTRATION_FORM_SURNAME_MAX_LENGTH
+from team_finder.service import normalize_phone
+from team_finder.validators import validate_github_link, validate_phone
 
 class RegistrationForm(forms.Form):
     name = forms.CharField(
-        max_length=124,
+        max_length=REGISTRATION_FORM_NAME_MAX_LENGTH,
         label="Имя",
         widget=forms.TextInput(attrs={"placeholder": "Имя"}),
     )
     surname = forms.CharField(
-        max_length=124,
+        max_length=REGISTRATION_FORM_SURNAME_MAX_LENGTH,
         label="Фамилия",
         widget=forms.TextInput(attrs={"placeholder": "Фамилия"}),
     )
@@ -71,45 +71,6 @@ class LoginForm(forms.Form):
     def get_user(self):
         return self._user
 
-
-def _normalize_phone(phone: str) -> str:
-    """Приводит номер к формату +7XXXXXXXXXX."""
-    phone = phone.strip()
-    if phone.startswith("8"):
-        return "+7" + phone[1:]
-    return phone
-
-
-def _validate_phone(phone: str, current_user_id=None) -> str:
-    """Валидирует и нормализует телефонный номер."""
-    if not phone:
-        return phone
-    phone = phone.strip()
-    if not re.fullmatch(r"(8\d{10}|\+7\d{10})", phone):
-        raise ValidationError(
-            "Введите номер в формате 8XXXXXXXXXX или +7XXXXXXXXXX."
-        )
-    normalized = _normalize_phone(phone)
-    qs = User.objects.filter(phone=normalized)
-    if current_user_id:
-        qs = qs.exclude(pk=current_user_id)
-    if qs.exists():
-        raise ValidationError(
-            "Этот номер телефона уже используется другим пользователем."
-        )
-    return normalized
-
-
-def _validate_github_url(url: str) -> str:
-    if not url:
-        return url
-    if not re.match(r"https?://(www\.)?github\.com/", url):
-        raise ValidationError(
-            "Ссылка должна вести на GitHub (https://github.com/...)."
-        )
-    return url
-
-
 class EditProfileForm(forms.ModelForm):
     class Meta:
         model = User
@@ -149,10 +110,10 @@ class EditProfileForm(forms.ModelForm):
 
     def clean_phone(self):
         phone = self.cleaned_data.get("phone", "")
-        return _validate_phone(phone, self._current_user_id)
+        return validate_phone(phone, self._current_user_id)
 
     def clean_github_url(self):
-        return _validate_github_url(
+        return validate_github_link(
             self.cleaned_data.get("github_url", "")
         )
 
@@ -183,8 +144,8 @@ class ChangePasswordForm(forms.Form):
 
     def clean(self):
         cleaned = super().clean()
-        p1 = cleaned.get("new_password1")
-        p2 = cleaned.get("new_password2")
-        if p1 and p2 and p1 != p2:
+        new_password_first_field = cleaned.get("new_password1")
+        new_password_second_field = cleaned.get("new_password2")
+        if new_password_first_field and new_password_second_field and new_password_first_field != new_password_second_field:
             raise ValidationError("Новые пароли не совпадают.")
         return cleaned
