@@ -11,6 +11,7 @@ from .models import Project, Skill
 from team_finder.service import paginator
 from team_finder.constants import CLOSE_STATUS, MAX_SKIN_IN_PAGE
 
+
 # ========== ПУБЛИЧНЫЕ СТРАНИЦЫ ==========
 def project_index(request):
     all_skills = Skill.objects.values_list(
@@ -61,7 +62,7 @@ def project_create_view(request):
         project.participants.add(
             request.user
         )  # автор становится участником
-        return redirect('projects:detail', project_id=project.pk)
+        return redirect("projects:detail", project_id=project.pk)
     return render(
         request,
         "projects/create-project.html",
@@ -73,12 +74,12 @@ def project_create_view(request):
 def project_edit_view(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
     if project.owner != request.user and not request.user.is_staff:
-        return redirect('projects:detail', project_id=project_id)
+        return redirect("projects:detail", project_id=project_id)
 
     form = ProjectCreateForm(request.POST or None, instance=project)
     if form.is_valid():
         form.save()
-        return redirect('projects:detail', project_id=project_id)
+        return redirect("projects:detail", project_id=project_id)
 
     return render(
         request,
@@ -98,7 +99,7 @@ def toggle_project_participation(request, project_id):
                 "status": "error",
                 "detail": "Владелец не может покинуть свой проект",
             },
-            status= HTTPStatus.BAD_REQUEST,
+            status=HTTPStatus.BAD_REQUEST,
         )
 
     is_participant = project.participants.filter(
@@ -118,7 +119,9 @@ def toggle_project_participation(request, project_id):
 def close_project(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
     if project.owner != request.user and not request.user.is_staff:
-        return JsonResponse({"status": "error"}, status=HTTPStatus.FORBIDDEN)
+        return JsonResponse(
+            {"status": "error"}, status=HTTPStatus.FORBIDDEN
+        )
 
     project.status = CLOSE_STATUS
     project.save(update_fields=["status"])
@@ -169,13 +172,17 @@ def add_project_skill(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
     if project.owner != request.user:
         return JsonResponse(
-            {"error": "Недостаточно прав"}, status=HTTPStatus.FORBIDDEN
+            {"error": "Недостаточно прав"},
+            status=HTTPStatus.FORBIDDEN,
         )
 
     try:
         body = json.loads(request.body)
     except (json.JSONDecodeError, ValueError):
-        return JsonResponse({"error": "Невалидный JSON"}, status=HTTPStatus.BAD_REQUEST)
+        return JsonResponse(
+            {"error": "Невалидный JSON"},
+            status=HTTPStatus.BAD_REQUEST,
+        )
 
     skill_id = body.get("skill_id")
     raw_name = body.get("name", "").strip()
@@ -187,7 +194,8 @@ def add_project_skill(request, project_id):
         skill, created = Skill.objects.get_or_create(name=raw_name)
     else:
         return JsonResponse(
-            {"error": "Укажите skill_id или name"}, status=HTTPStatus.BAD_REQUEST
+            {"error": "Укажите skill_id или name"},
+            status=HTTPStatus.BAD_REQUEST,
         )
 
     added = not project.skills.filter(pk=skill.pk).exists()
@@ -211,7 +219,8 @@ def remove_project_skill(request, project_id, skill_id):
     project = get_object_or_404(Project, pk=project_id)
     if project.owner != request.user:
         return JsonResponse(
-            {"error": "Недостаточно прав"}, status=HTTPStatus.FORBIDDEN
+            {"error": "Недостаточно прав"},
+            status=HTTPStatus.FORBIDDEN,
         )
 
     skill = get_object_or_404(Skill, pk=skill_id)

@@ -10,9 +10,15 @@ from django.db import transaction
 
 from projects.models import Project, Skill
 from users.models import User
-from team_finder.constants import SUPERUSER_EMAIL, SUPERUSER_NAME, SUPERUSER_SURNAME, SUPERUSER_PASSWORD
+from team_finder.constants import (
+    SUPERUSER_EMAIL,
+    SUPERUSER_NAME,
+    SUPERUSER_SURNAME,
+    SUPERUSER_PASSWORD,
+)
 
 import json
+
 
 class Command(BaseCommand):
     help = "Seed database with test users, projects and skills"
@@ -29,7 +35,7 @@ class Command(BaseCommand):
 
     # ── Superuser ──────────────────────────────────────────────────────────────
 
-    def _create_superuser(self):        
+    def _create_superuser(self):
         if not User.objects.filter(email=SUPERUSER_EMAIL).exists():
             User.objects.create_superuser(
                 email=SUPERUSER_EMAIL,
@@ -53,7 +59,7 @@ class Command(BaseCommand):
 
     def _create_users(self):
         specs = []
-        with open('specs.json', 'r', encoding='utf-8') as json_file:
+        with open("specs.json", "r", encoding="utf-8") as json_file:
             specs = json.load(json_file)
 
         created = []
@@ -104,8 +110,10 @@ class Command(BaseCommand):
     def _create_projects(self, users, skills):
         maria, alex, kate, dmitry = users
 
-        projects_data = [] 
-        with open('projects_data.json', 'r', encoding='utf-8') as json_file:
+        projects_data = []
+        with open(
+            "projects_data.json", "r", encoding="utf-8"
+        ) as json_file:
             projects_data = json.load(json_file)
 
         for data in projects_data:

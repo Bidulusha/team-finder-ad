@@ -73,7 +73,10 @@ class ProjectDetailViewTest(TestCase):
         """Создаёт тестовые данные один раз для всех тестов."""
         cls.owner = create_user()
         cls.project = create_project(cls.owner)
-        cls.detail_url = reverse("projects:project_detail", kwargs={"project_id": cls.project.pk})
+        cls.detail_url = reverse(
+            "projects:project_detail",
+            kwargs={"project_id": cls.project.pk},
+        )
 
     def test_detail_returns_200(self):
         resp = self.client.get(self.detail_url)
@@ -84,7 +87,9 @@ class ProjectDetailViewTest(TestCase):
         self.assertContains(resp, self.project.name)
 
     def test_404_on_nonexistent(self):
-        url = reverse("projects:project_detail", kwargs={"project_id": 99999})
+        url = reverse(
+            "projects:project_detail", kwargs={"project_id": 99999}
+        )
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, HTTPStatus.NOT_FOUND)
 
@@ -122,7 +127,10 @@ class CreateProjectViewTest(TestCase):
         }
         resp = self.auth_client.post(self.create_url, data)
         project = Project.objects.get(name=data["name"])
-        detail_url = reverse("projects:project_detail", kwargs={"project_id": project.pk})
+        detail_url = reverse(
+            "projects:project_detail",
+            kwargs={"project_id": project.pk},
+        )
         self.assertRedirects(resp, detail_url)
 
     def test_owner_set_automatically(self):
@@ -156,7 +164,9 @@ class CreateProjectViewTest(TestCase):
         }
         resp = self.auth_client.post(self.create_url, data)
         self.assertEqual(resp.status_code, HTTPStatus.OK)
-        self.assertFalse(Project.objects.filter(name=data["name"]).exists())
+        self.assertFalse(
+            Project.objects.filter(name=data["name"]).exists()
+        )
 
 
 # ========== TOGGLE PARTICIPATION TESTS ==========
@@ -167,7 +177,10 @@ class ToggleParticipateTest(TestCase):
         cls.owner = create_user(email="owner@x.com")
         cls.other = create_user(email="other@x.com")
         cls.project = create_project(cls.owner)
-        cls.toggle_url = reverse("projects:toggle_participate", kwargs={"project_id": cls.project.pk})
+        cls.toggle_url = reverse(
+            "projects:toggle_participate",
+            kwargs={"project_id": cls.project.pk},
+        )
 
     def setUp(self):
         """Создаёт отдельные клиенты для каждого теста."""
@@ -223,7 +236,10 @@ class CompleteProjectTest(TestCase):
         cls.owner = create_user(email="owner@x.com")
         cls.other = create_user(email="other@x.com")
         cls.project = create_project(cls.owner)
-        cls.complete_url = reverse("projects:complete_project", kwargs={"project_id": cls.project.pk})
+        cls.complete_url = reverse(
+            "projects:complete_project",
+            kwargs={"project_id": cls.project.pk},
+        )
 
     def setUp(self):
         """Создаёт отдельные клиенты для каждого теста."""
@@ -259,7 +275,10 @@ class ToggleFavoriteTest(TestCase):
         cls.user = create_user()
         cls.owner = create_user(email="owner@x.com")
         cls.project = create_project(cls.owner)
-        cls.favorite_url = reverse("projects:toggle_favorite", kwargs={"project_id": cls.project.pk})
+        cls.favorite_url = reverse(
+            "projects:toggle_favorite",
+            kwargs={"project_id": cls.project.pk},
+        )
 
     def setUp(self):
         """Создаёт отдельный клиент для каждого теста."""
@@ -295,7 +314,10 @@ class SkillsAPITest(TestCase):
         cls.other = create_user(email="other@x.com")
         cls.project = create_project(cls.owner)
         cls.skills_url = reverse("projects:skill_autocomplete")
-        cls.add_skill_url = reverse("projects:add_skill", kwargs={"project_id": cls.project.pk})
+        cls.add_skill_url = reverse(
+            "projects:add_skill",
+            kwargs={"project_id": cls.project.pk},
+        )
 
         # Создаём тестовые навыки
         cls.python_skill = Skill.objects.create(name="Python")
@@ -369,23 +391,31 @@ class SkillsAPITest(TestCase):
 
     def test_remove_skill(self):
         self.project.skills.add(self.python_skill)
-        remove_url = reverse("projects:remove_skill", kwargs={
-            "project_id": self.project.pk,
-            "skill_id": self.python_skill.pk,
-        })
+        remove_url = reverse(
+            "projects:remove_skill",
+            kwargs={
+                "project_id": self.project.pk,
+                "skill_id": self.python_skill.pk,
+            },
+        )
         resp = self.owner_client.post(
             remove_url,
             content_type="application/json",
         )
         self.assertEqual(resp.status_code, HTTPStatus.OK)
         self.assertNotIn(self.python_skill, self.project.skills.all())
-        self.assertTrue(Skill.objects.filter(pk=self.python_skill.pk).exists())
+        self.assertTrue(
+            Skill.objects.filter(pk=self.python_skill.pk).exists()
+        )
 
     def test_remove_skill_non_owner_forbidden(self):
         self.project.skills.add(self.python_skill)
-        remove_url = reverse("projects:remove_skill", kwargs={
-            "project_id": self.project.pk,
-            "skill_id": self.python_skill.pk,
-        })
+        remove_url = reverse(
+            "projects:remove_skill",
+            kwargs={
+                "project_id": self.project.pk,
+                "skill_id": self.python_skill.pk,
+            },
+        )
         resp = self.other_client.post(remove_url)
         self.assertEqual(resp.status_code, HTTPStatus.FORBIDDEN)

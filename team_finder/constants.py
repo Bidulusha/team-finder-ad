@@ -2,15 +2,15 @@
 PAGINATION_SIZE = 12  # количество проектов на странице
 
 # STATUS
-STATUS_CHOICES = [("open", "Открыт"), ("closed", "Закрыт")] # Статусы 
-CLOSE_STATUS = 'closed'
-STATUS_OPEN = 'open'
+STATUS_CHOICES = [("open", "Открыт"), ("closed", "Закрыт")]  # Статусы
+CLOSE_STATUS = "closed"
+STATUS_OPEN = "open"
 
 # SKILLS
 MAX_SKIN_IN_PAGE = 10
 
 # VALIDATOR
-ALLOWED_REPOSITORY_PREFIX = ( # Разрешённые начала гитхаб (при необходимости и других гит хранилищ) ссылки
+ALLOWED_REPOSITORY_PREFIX = (  # Разрешённые начала гитхаб (при необходимости и других гит хранилищ) ссылки
     "http://github.com/",
     "https://github.com/",
     "http://www.github.com/",
@@ -32,7 +32,7 @@ ABOUT_TEXTFIELD_MAX_LENGTH = 256
 # AVATARS
 AVATAR_IMAGE_SIZE = 200
 AVATAR_FONT_SIZE = 100
-AVATAR_IMAGE_FORMAT = "png"
+AVATAR_IMAGE_FORMAT = "PNG"
 AVATAR_TEXT_COLOR = "white"
 
 TEXT_START_X = 0

@@ -2,8 +2,10 @@ import re
 
 from django.core.exceptions import ValidationError
 from team_finder.constants import ALLOWED_REPOSITORY_PREFIX
+from team_finder.service import normalize_phone
 
 from users.models import User
+
 
 def validate_github_link(url: str) -> str:
     if not url:
@@ -14,6 +16,7 @@ def validate_github_link(url: str) -> str:
             "Ссылка должна вести на GitHub (https://github.com/...)."
         )
     return url
+
 
 def validate_phone(phone: str, current_user_id=None) -> str:
     if not phone:

@@ -3,6 +3,7 @@ from .models import Project
 from team_finder.validators import validate_github_link
 from team_finder.constants import STATUS_CHOICES
 
+
 # ========== PROJECT FORM ==========
 class ProjectCreateForm(forms.ModelForm):
     class Meta:
@@ -24,9 +25,7 @@ class ProjectCreateForm(forms.ModelForm):
             "github_url": forms.URLInput(
                 attrs={"placeholder": "https://github.com/..."}
             ),
-            "status": forms.Select(
-                choices=STATUS_CHOICES
-            ),
+            "status": forms.Select(choices=STATUS_CHOICES),
         }
 
     def clean_github_url(self):

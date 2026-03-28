@@ -3,9 +3,15 @@ from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 
 from .models import User
-from team_finder.constants import REGISTRATION_FORM_NAME_MAX_LENGTH, REGISTRATION_FORM_SURNAME_MAX_LENGTH
-from team_finder.service import normalize_phone
-from team_finder.validators import validate_github_link, validate_phone
+from team_finder.constants import (
+    REGISTRATION_FORM_NAME_MAX_LENGTH,
+    REGISTRATION_FORM_SURNAME_MAX_LENGTH,
+)
+from team_finder.validators import (
+    validate_github_link,
+    validate_phone,
+)
+
 
 class RegistrationForm(forms.Form):
     name = forms.CharField(
@@ -70,6 +76,7 @@ class LoginForm(forms.Form):
 
     def get_user(self):
         return self._user
+
 
 class EditProfileForm(forms.ModelForm):
     class Meta:
@@ -146,6 +153,10 @@ class ChangePasswordForm(forms.Form):
         cleaned = super().clean()
         new_password_first_field = cleaned.get("new_password1")
         new_password_second_field = cleaned.get("new_password2")
-        if new_password_first_field and new_password_second_field and new_password_first_field != new_password_second_field:
+        if (
+            new_password_first_field
+            and new_password_second_field
+            and new_password_first_field != new_password_second_field
+        ):
             raise ValidationError("Новые пароли не совпадают.")
         return cleaned

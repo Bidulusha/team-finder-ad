@@ -30,7 +30,7 @@ def register(request):
         )
         login(request, user)
         return redirect("projects:list")
-    
+
     return render(request, "users/register.html", {"form": form})
 
 
@@ -72,14 +72,19 @@ def users_list(request):
 @login_required
 def edit_profile(request):
     user = request.user
-    form = EditProfileForm(request.POST or None, request.FILES or None, instance=user, current_user_id=user.pk)
+    form = EditProfileForm(
+        request.POST or None,
+        request.FILES or None,
+        instance=user,
+        current_user_id=user.pk,
+    )
 
     if form.is_valid():
         # Если новый аватар не загружен — оставляем старый
         if not request.FILES.get("avatar"):
             form.instance.avatar = user.avatar
         form.save()
-        return redirect("users:profile_detail", user_id = user.pk)
+        return redirect("users:profile_detail", user_id=user.pk)
 
     return render(request, "users/edit_profile.html", {"form": form})
 
@@ -92,10 +97,8 @@ def change_password(request):
     if form.is_valid():
         user.set_password(form.cleaned_data["new_password1"])
         user.save()
-        update_session_auth_hash(
-            request, user
-        )  # не разлогинивать
-        return redirect("users:profile_detail", user_id = user.pk)
+        update_session_auth_hash(request, user)  # не разлогинивать
+        return redirect("users:profile_detail", user_id=user.pk)
 
     return render(
         request, "users/change_password.html", {"form": form}

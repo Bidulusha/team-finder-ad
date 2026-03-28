@@ -12,10 +12,19 @@ from PIL import Image, ImageDraw, ImageFont
 
 
 from .managers import UserManager
-from team_finder.constants \
-    import AVATAR_COLORS, USER_NAME_MAX_LENGTH, USER_SURNAME_MAX_LENGTH, \
-        ABOUT_TEXTFIELD_MAX_LENGTH, AVATAR_IMAGE_SIZE, AVATAR_FONT_SIZE, AVATAR_IMAGE_FORMAT, \
-        AVATAR_TEXT_COLOR, TEXT_START_X, TEXT_START_Y
+from team_finder.constants import (
+    AVATAR_COLORS,
+    USER_NAME_MAX_LENGTH,
+    USER_SURNAME_MAX_LENGTH,
+    ABOUT_TEXTFIELD_MAX_LENGTH,
+    AVATAR_IMAGE_SIZE,
+    AVATAR_FONT_SIZE,
+    AVATAR_IMAGE_FORMAT,
+    AVATAR_TEXT_COLOR,
+    TEXT_START_X,
+    TEXT_START_Y,
+)
+
 
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
@@ -27,7 +36,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         max_length=12, blank=True, null=True, unique=True
     )
     github_url = models.URLField(blank=True)
-    about = models.TextField(max_length=ABOUT_TEXTFIELD_MAX_LENGTH, blank=True)
+    about = models.TextField(
+        max_length=ABOUT_TEXTFIELD_MAX_LENGTH, blank=True
+    )
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
@@ -66,7 +77,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         if font is None:
             font = ImageFont.load_default()
 
-        bbox = draw.textbbox((TEXT_START_X, TEXT_START_Y), letter, font=font)
+        bbox = draw.textbbox(
+            (TEXT_START_X, TEXT_START_Y), letter, font=font
+        )
         text_w = bbox[2] - bbox[0]
         text_h = bbox[3] - bbox[1]
         x = (size - text_w) / 2 - bbox[0]
@@ -78,7 +91,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         buf.seek(0)
 
         self.avatar.save(
-            f"avatar_{uuid.uuid4()}.{AVATAR_IMAGE_FORMAT}",
+            f"avatar_{uuid.uuid4()}.{AVATAR_IMAGE_FORMAT.lower()}",
             ContentFile(buf.read()),
             save=False,
         )
