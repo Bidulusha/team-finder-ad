@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 
-from .models import Project, Skill
+from projects.models import Project, Skill
 
 
 # ========== SKILL ADMIN ==========
@@ -26,6 +26,10 @@ class ProjectModelAdmin(admin.ModelAdmin):
     filter_horizontal = ("participants", "skills", "favorites")
     readonly_fields = ("created_at",)
 
+    @admin.display(
+        ordering="participants",
+        description="Участники",
+    )
     def participants_count(self, obj):
         count = obj.participants.count()
         return format_html(
@@ -37,9 +41,6 @@ class ProjectModelAdmin(admin.ModelAdmin):
             "<strong>{}</strong></span>",
             count,
         )
-
-    participants_count.short_description = "Участники"
-    participants_count.admin_order_field = "participants"
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)

@@ -2,9 +2,12 @@
 PAGINATION_SIZE = 12  # количество проектов на странице
 
 # STATUS
-STATUS_CHOICES = [("open", "Открыт"), ("closed", "Закрыт")]  # Статусы
-CLOSE_STATUS = "closed"
+STATUS_CLOSE = "closed"
 STATUS_OPEN = "open"
+STATUS_CHOICES = [
+    (STATUS_OPEN, "Открыт"),
+    (STATUS_CLOSE, "Закрыт"),
+]  # Статусы
 
 # SKILLS
 MAX_SKIN_IN_PAGE = 10
@@ -28,6 +31,8 @@ USER_NAME_MAX_LENGTH = 124
 USER_SURNAME_MAX_LENGTH = 124
 
 ABOUT_TEXTFIELD_MAX_LENGTH = 256
+
+PHONE_NUMBER_LENGTH = 12
 
 # AVATARS
 AVATAR_IMAGE_SIZE = 200

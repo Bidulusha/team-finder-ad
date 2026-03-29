@@ -1,15 +1,15 @@
 import json
+from http import HTTPStatus
 
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
-from http import HTTPStatus
 
-from .forms import ProjectCreateForm
-from .models import Project, Skill
+from projects.forms import ProjectCreateForm
+from projects.models import Project, Skill
+from team_finder.constants import STATUS_CLOSE, MAX_SKIN_IN_PAGE
 from team_finder.service import paginator
-from team_finder.constants import CLOSE_STATUS, MAX_SKIN_IN_PAGE
 
 
 # ========== ПУБЛИЧНЫЕ СТРАНИЦЫ ==========
@@ -123,7 +123,7 @@ def close_project(request, project_id):
             {"status": "error"}, status=HTTPStatus.FORBIDDEN
         )
 
-    project.status = CLOSE_STATUS
+    project.status = STATUS_CLOSE
     project.save(update_fields=["status"])
     return JsonResponse({"status": "ok"})
 

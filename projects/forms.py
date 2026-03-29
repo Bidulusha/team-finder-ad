@@ -1,7 +1,8 @@
 from django import forms
-from .models import Project
-from team_finder.validators import validate_github_link
+
 from team_finder.constants import STATUS_CHOICES
+from team_finder.validators import validate_github_link
+from projects.models import Project
 
 
 # ========== PROJECT FORM ==========

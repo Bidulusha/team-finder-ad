@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.html import format_html
 
-from .models import User
+from users.models import User
 from team_finder.constants import AVATAR_COLORS
 
 
@@ -65,6 +65,7 @@ class UserAdmin(BaseUserAdmin):
         ),
     )
 
+    @admin.display(ordering="avatar", description="Аватар")
     def avatar_preview(self, obj):
         if obj.avatar and obj.avatar.name:
             return format_html(
@@ -87,9 +88,6 @@ class UserAdmin(BaseUserAdmin):
             "background-color: #ccc; display: flex; align-items: center; "
             'justify-content: center; color: white; font-weight: bold;">?</div>'
         )
-
-    avatar_preview.short_description = "Аватар"
-    avatar_preview.admin_order_field = "avatar"
 
     def _get_avatar_color(self, user_id):
         return (

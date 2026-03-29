@@ -1,10 +1,12 @@
 from django.conf import settings
 from django.db import models
 from django.shortcuts import redirect
+
 from team_finder.constants import (
     STATUS_CHOICES,
     SKILL_NAME_MAX_LENGTH,
     PROJECT_NAME_MAX_LENGTH,
+    STATUS_OPEN,
 )
 
 
@@ -42,7 +44,7 @@ class Project(models.Model):
             ]
         ),
         choices=STATUS_CHOICES,
-        default="open",
+        default=STATUS_OPEN,
     )
     participants = models.ManyToManyField(
         settings.AUTH_USER_MODEL,

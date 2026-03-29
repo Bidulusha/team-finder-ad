@@ -11,7 +11,7 @@ from django.db import models
 from PIL import Image, ImageDraw, ImageFont
 
 
-from .managers import UserManager
+from users.managers import UserManager
 from team_finder.constants import (
     AVATAR_COLORS,
     USER_NAME_MAX_LENGTH,
@@ -23,6 +23,7 @@ from team_finder.constants import (
     AVATAR_TEXT_COLOR,
     TEXT_START_X,
     TEXT_START_Y,
+    PHONE_NUMBER_LENGTH,
 )
 
 
@@ -33,7 +34,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     avatar = models.ImageField(upload_to="avatars/", blank=True)
     # phone: null=True чтобы несколько пустых значений не конфликтовали по unique
     phone = models.CharField(
-        max_length=12, blank=True, null=True, unique=True
+        max_length=PHONE_NUMBER_LENGTH,
+        blank=True,
+        null=True,
+        unique=True,
     )
     github_url = models.URLField(blank=True)
     about = models.TextField(

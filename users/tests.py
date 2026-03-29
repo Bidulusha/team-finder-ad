@@ -1,7 +1,10 @@
-from django.test import TestCase, Client
-from .forms import RegistrationForm
+from http import HTTPStatus
 
-from .models import User
+from django.test import TestCase, Client
+from django.urls import reverse
+
+from users.forms import RegistrationForm, EditProfileForm
+from users.models import User
 
 
 def make_user(
@@ -54,8 +57,6 @@ class RegistrationFormTest(TestCase):
         self.assertTrue(form.is_valid())
 
     def test_duplicate_email_rejected(self):
-        from .forms import RegistrationForm
-
         make_user(email="dup@example.com")
         form = RegistrationForm(
             data={
@@ -71,8 +72,6 @@ class RegistrationFormTest(TestCase):
 
 class PhoneValidationTest(TestCase):
     def _form(self, phone, user=None):
-        from .forms import EditProfileForm
-
         data = {
             "name": "A",
             "surname": "B",
@@ -113,8 +112,6 @@ class PhoneValidationTest(TestCase):
 
 class GithubUrlValidationTest(TestCase):
     def _form(self, url):
-        from .forms import EditProfileForm
-
         data = {
             "name": "A",
             "surname": "B",
@@ -145,12 +142,12 @@ class AuthViewsTest(TestCase):
         )
 
     def test_login_page_get(self):
-        resp = self.client.get("/users/login/")
-        self.assertEqual(resp.status_code, 200)
+        resp = self.client.get(reverse("users:login"))
+        self.assertEqual(resp.status_code, HTTPStatus.OK)
 
     def test_login_success_redirects(self):
         resp = self.client.post(
-            "/users/login/",
+            reverse("users:login"),
             {
                 "email": "auth@example.com",
                 "password": "correct",
@@ -160,18 +157,20 @@ class AuthViewsTest(TestCase):
 
     def test_login_wrong_password(self):
         resp = self.client.post(
-            "/users/login/",
+            reverse("users:login"),
             {
                 "email": "auth@example.com",
                 "password": "wrong",
             },
         )
-        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.status_code, HTTPStatus.OK)
         self.assertContains(resp, "Неверный")
 
     def test_register_creates_user_and_redirects(self):
         resp = self.client.post(
-            "/users/register/",
+            reverse(
+                "users:register",
+            ),
             {
                 "name": "Новый",
                 "surname": "Юзер",
@@ -186,16 +185,21 @@ class AuthViewsTest(TestCase):
 
     def test_logout_redirects(self):
         self.client.force_login(self.user)
-        resp = self.client.get("/users/logout/")
+        resp = self.client.get(reverse("users:logout"))
         self.assertRedirects(resp, "/projects/list/")
 
     def test_edit_profile_requires_login(self):
-        resp = self.client.get("/users/edit-profile/")
+        resp = self.client.get(reverse("users:edit_profile"))
         self.assertRedirects(
             resp, "/users/login/?next=/users/edit-profile/"
         )
 
     def test_profile_detail(self):
-        resp = self.client.get(f"/users/{self.user.pk}/")
-        self.assertEqual(resp.status_code, 200)
+        resp = self.client.get(
+            reverse(
+                "users:profile_detail",
+                kwargs={"user_id": self.user.pk},
+            )
+        )
+        self.assertEqual(resp.status_code, HTTPStatus.OK)
         self.assertContains(resp, self.user.name)
